@@ -1,0 +1,98 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+struct User {
+    string name;
+    int age;
+    string address;
+    double balance;
+};
+
+void createAccount(User &user) {
+    cout << "Enter your name: ";
+    getline(cin, user.name);
+    cout << "Enter your age: ";
+    cin >> user.age;
+    cin.ignore(); // Consume newline character
+    cout << "Enter your address: ";
+    getline(cin, user.address);
+    user.balance = 0.0;
+}
+
+void signIn(User &user) {
+    cout << "Welcome back, " << user.name << "!" << endl;
+}
+
+void withdraw(User &user) {
+    double amount;
+    cout << "Enter withdrawal amount: ";
+    cin >> amount;
+    user.balance -= amount;
+    cout << "Withdrawal successful. New balance: " << user.balance << endl;
+}
+
+void deposit(User &user) {
+    double amount;
+    cout << "Enter deposit amount: ";
+    cin >> amount;
+    user.balance += amount;
+    cout << "Deposit successful. New balance: " << user.balance << endl;
+}
+
+void checkBalance(const User &user) {
+    cout << "Current balance: " << user.balance << endl;
+}
+
+int main() {
+    User currentUser;
+    int choice;
+
+    do {
+        cout << "1. Create account\n2. Sign in\n0. Exit\nEnter your choice: ";
+        cin >> choice;
+        cin.ignore(); // Consume newline character
+
+        switch (choice) {
+            case 1:
+                createAccount(currentUser);
+                break;
+            case 2:
+                if (currentUser.name.empty()) {
+                    cout << "No account found. Please create an account first." << endl;
+                } else {
+                    signIn(currentUser);
+                    do {
+                        cout << "1. Withdraw\n2. Deposit\n3. Check balance\n4. Back\nEnter your choice: ";
+                        cin >> choice;
+                        cin.ignore(); // Consume newline character
+
+                        switch (choice) {
+                            case 1:
+                                withdraw(currentUser);
+                                break;
+                            case 2:
+                                deposit(currentUser);
+                                break;
+                            case 3:
+                                checkBalance(currentUser);
+                                break;
+                            case 4:
+                                break;
+                            default:
+                                cout << "Invalid choice. Try again." << endl;
+                        }
+                    } while (choice != 4);
+                }
+                break;
+            case 0:
+                cout << "Exiting program. Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Try again." << endl;
+        }
+    } while (choice != 0);
+
+    return 0;
+}
